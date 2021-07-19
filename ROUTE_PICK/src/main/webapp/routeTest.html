@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript"
+	src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=8e3qtsqn6i"></script>
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=8e3qtsqn6i&submodules=panorama,geocoder"></script>
+	
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		
+		$("#map").click(function(){
+				//지역 검색
+				$.get(
+					 "../local.rp",
+					 {
+						 local:$('textarea').val()
+					 },
+					 function(data){
+						 data=JSON.parse(data);
+						 console.log(data);
+						 const mapx=data.items[0].mapx;
+						 const mapy=data.items[0].mapy;
+						 console.log(mapx,mapy);
+						  
+						var firstLocation = new naver.maps.Point(mapx, mapy);							
+						var first_latLng = naver.maps.TransCoord.fromTM128ToLatLng(firstLocation);
+						var map = new naver.maps.Map('map', {
+					            center: first_latLng,
+					            zoom: 15
+					    });
+
+						data.items.forEach(function(item,index){
+							  console.log(index,item.title,item.mapx,item.mapy);
+							  var mapxy = new naver.maps.Point(item.mapx, item.mapy);
+							  var latLng = naver.maps.TransCoord.fromTM128ToLatLng(mapxy);
+							  var marker = new naver.maps.Marker({
+				                    map: map,
+				                    title:item.title,
+				                    position: latLng,
+				                  /*   icon: {
+				                        url: '../img/marker.png',
+				                    } */
+				                });
+						  });
+						  
+					  });
+				}, 5000);
+			recognition.start();
+		});
+</script>
+</head>
+<body>
+	<img id="map" src="../img/map.png"/><br>
+</body>
+</html>
