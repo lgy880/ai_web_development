@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="mapper.member">
+
+	<resultMap type="memberVO" id="memResult">
+		<result property="id" column="id" />
+		<result property="pw" column="pw" />
+		<result property="name" column="name" />	
+		<result property="email" column="email" />	
+		<result property="age" column="age" />	
+		<result property="weight" column="weight" />	
+		<result property="height" column="height" />	
+		<result property="gender" column="gender" />	
+	</resultMap>
+	
+	<select id="selectAllMemberList" resultMap="memResult">
+		<![CDATA[
+			select * from user_db 
+		]]>
+	</select>
+	
+	<select id="login" resultType="String" parameterType="memberVO">
+		<![CDATA[
+			select name from user_db where id=#{id} and pw=#{pw}
+		]]>
+	</select>
+	
+	<select id="selectMemberById" resultMap="memResult" parameterType="String">
+		<![CDATA[
+			select * from user_db where id=#{id}
+		]]>
+	</select>
+	
+	<select id="selectMemberByPw"  resultMap="memResult" parameterType="String">
+		<![CDATA[
+			select * from user_db where pw=#{pw}
+		]]>
+	</select>
+	
+	<insert id="memberInsert"   parameterType="memberVO" >
+		<![CDATA[
+			insert into user_db(id, pw, name, email, age, weight, height, gender) 
+			values(#{id},#{pw},#{name}, #{email}, #{age}, #{weight}, #{height}, #{gender})
+		]]>
+	</insert>
+	
+	<update  id="updateMember"  parameterType="memberVO" >
+		<![CDATA[
+			update user_db
+			set pw=#{pw}, name=#{name}
+			where id=#{id}
+		]]>
+	</update>
+	
+	<delete id="deleteMember" parameterType="String">
+		<![CDATA[
+			delete from user_db where id=#{id}
+		]]>
+	
+	</delete>
+	
+
+</mapper> 
